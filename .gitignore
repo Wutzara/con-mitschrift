@@ -1,0 +1,4 @@
+*.log
+*.aux
+_minted_mitschrift
+*.out

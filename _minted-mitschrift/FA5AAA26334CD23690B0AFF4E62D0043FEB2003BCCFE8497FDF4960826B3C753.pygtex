@@ -1,0 +1,10 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{class} \PYG{n+nc}{UnsafeStates} \PYG{o}{\PYGZob{}}
+    \PYG{k+kd}{private} \PYG{n}{String}\PYG{o}{[]} \PYG{n}{states} \PYG{o}{=} \PYG{k}{new} \PYG{n}{String}\PYG{o}{[]} \PYG{o}{\PYGZob{}} \PYG{l+s}{\PYGZdq{}AK\PYGZdq{}}\PYG{o}{,} \PYG{l+s}{\PYGZdq{}AL\PYGZdq{}} \PYG{c+cm}{/*...*/}
+    \PYG{o}{\PYGZcb{};}
+
+    \PYG{k+kd}{public} \PYG{n}{String}\PYG{o}{[]} \PYG{n+nf}{getStates}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+        \PYG{k}{return} \PYG{n}{states}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

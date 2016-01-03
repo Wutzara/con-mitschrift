@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{IntStream} \PYG{n}{s} \PYG{o}{=} \PYG{n}{Arrays}\PYG{o}{.}\PYG{n+na}{stream}\PYG{o}{(}\PYG{n}{zahlen}\PYG{o}{);}
+\PYG{n}{Map}\PYG{o}{\PYGZlt{}}\PYG{n}{Integer}\PYG{o}{,} \PYG{n}{Long}\PYG{o}{\PYGZgt{}} \PYG{n}{histogramm} \PYG{o}{=}
+    \PYG{n}{s}\PYG{o}{.}\PYG{n+na}{boxed}\PYG{o}{().}\PYG{n+na}{collect}\PYG{o}{(}\PYG{n}{Collectors}\PYG{o}{.}\PYG{n+na}{groupingBy}\PYG{o}{(}
+        \PYG{n}{Integer}\PYG{o}{::}\PYG{n}{intValue}\PYG{o}{,} \PYG{n}{Collectors}\PYG{o}{.}\PYG{n+na}{counting}\PYG{o}{()));}
+\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{println}\PYG{o}{(}\PYG{n}{histogramm}\PYG{o}{);}
+\end{Verbatim}

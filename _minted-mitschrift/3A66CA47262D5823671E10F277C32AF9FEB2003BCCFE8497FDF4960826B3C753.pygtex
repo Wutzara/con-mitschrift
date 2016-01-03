@@ -1,0 +1,50 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{public} \PYG{k+kd}{class} \PYG{n+nc}{Producer} \PYG{k+kd}{extends} \PYG{n}{SimpleFileVisitor}\PYG{o}{\PYGZlt{}}\PYG{n}{Path}\PYG{o}{\PYGZgt{}} \PYG{k+kd}{implements} \PYG{n}{Runnable} \PYG{o}{\PYGZob{}}
+    \PYG{k+kd}{private} \PYG{k+kd}{final} \PYG{n}{BlockingQueue}\PYG{o}{\PYGZlt{}}\PYG{n}{Path}\PYG{o}{\PYGZgt{}} \PYG{n}{queue}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{k+kd}{final} \PYG{k+kt}{int} \PYG{n}{consumer}\PYG{o}{;}
+
+    \PYG{k+kd}{public} \PYG{n+nf}{Producer}\PYG{o}{(}\PYG{n}{BlockingQueue}\PYG{o}{\PYGZlt{}}\PYG{n}{Path}\PYG{o}{\PYGZgt{}} \PYG{n}{queue}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{consumer}\PYG{o}{)}
+    \PYG{o}{\PYGZob{}}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{queue} \PYG{o}{=} \PYG{n}{queue}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{consumer} \PYG{o}{=} \PYG{n}{consumer}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{n+nd}{@Override}
+    \PYG{k+kd}{public} \PYG{k+kt}{void} \PYG{n+nf}{run}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+        \PYG{k}{try} \PYG{o}{\PYGZob{}}
+            \PYG{n}{Path} \PYG{n}{path} \PYG{o}{=} \PYG{n}{Paths}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}/home/gunibert/development\PYGZdq{}}\PYG{o}{);}
+            \PYG{n}{Files}\PYG{o}{.}\PYG{n+na}{walkFileTree}\PYG{o}{(}\PYG{n}{path}\PYG{o}{,} \PYG{k}{this}\PYG{o}{);}
+            \PYG{k}{for}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{o}{;} \PYG{n}{i} \PYG{o}{\PYGZlt{}} \PYG{n}{consumer}\PYG{o}{;} \PYG{o}{++}\PYG{n}{i}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+            	\PYG{n}{Path} \PYG{n}{poisonPill} \PYG{o}{=} \PYG{n}{Paths}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}wearedone\PYGZdq{}}\PYG{o}{);}
+            	\PYG{n}{queue}\PYG{o}{.}\PYG{n+na}{put}\PYG{o}{(}\PYG{n}{poisonPill}\PYG{o}{);}
+            \PYG{o}{\PYGZcb{}}
+        \PYG{o}{\PYGZcb{}} \PYG{k}{catch}\PYG{o}{(}\PYG{n}{IOException} \PYG{o}{|} \PYG{n}{InterruptedException} \PYG{n}{e}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+            \PYG{n}{e}\PYG{o}{.}\PYG{n+na}{printStackTrace}\PYG{o}{();}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{n+nd}{@Override}
+    \PYG{k+kd}{public} \PYG{n}{FileVisitResult} \PYG{n+nf}{visitFile}\PYG{o}{(}\PYG{n}{Path} \PYG{n}{file}\PYG{o}{,} \PYG{n}{BasicFileAttributes} \PYG{n}{arg1}\PYG{o}{)} \PYG{k+kd}{throws} \PYG{n}{IOException} \PYG{o}{\PYGZob{}}
+
+        \PYG{k}{if}\PYG{o}{(}\PYG{n}{file}\PYG{o}{.}\PYG{n+na}{toString}\PYG{o}{().}\PYG{n+na}{matches}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}.*\PYGZbs{}\PYGZbs{}.(java|cpp|h)\PYGZdq{}}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+            \PYG{k}{try} \PYG{o}{\PYGZob{}}
+                \PYG{n}{queue}\PYG{o}{.}\PYG{n+na}{put}\PYG{o}{(}\PYG{n}{file}\PYG{o}{);}
+            \PYG{o}{\PYGZcb{}} \PYG{k}{catch}\PYG{o}{(}\PYG{n}{Exception} \PYG{n}{e}\PYG{o}{)\PYGZob{}}
+                \PYG{n}{e}\PYG{o}{.}\PYG{n+na}{printStackTrace}\PYG{o}{();}
+            \PYG{o}{\PYGZcb{}}
+        \PYG{o}{\PYGZcb{}}
+
+        \PYG{k}{return} \PYG{n}{FileVisitResult}\PYG{o}{.}\PYG{n+na}{CONTINUE}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kd}{static} \PYG{k+kt}{void} \PYG{n+nf}{main}\PYG{o}{(}\PYG{n}{String}\PYG{o}{[]} \PYG{n}{args}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{n}{BlockingQueue}\PYG{o}{\PYGZlt{}}\PYG{n}{Path}\PYG{o}{\PYGZgt{}} \PYG{n}{queue} \PYG{o}{=} \PYG{k}{new} \PYG{n}{LinkedBlockingQueue}\PYG{o}{\PYGZlt{}}\PYG{n}{Path}\PYG{o}{\PYGZgt{}();}
+        \PYG{n}{Producer} \PYG{n}{p} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Producer}\PYG{o}{(}\PYG{n}{queue}\PYG{o}{,} \PYG{l+m+mi}{1}\PYG{o}{);}
+        \PYG{n}{Consumer} \PYG{n}{c} \PYG{o}{=} \PYG{k}{new} \PYG{n}{Consumer}\PYG{o}{(}\PYG{n}{queue}\PYG{o}{);}
+
+        \PYG{k}{new} \PYG{n}{Thread}\PYG{o}{(}\PYG{n}{c}\PYG{o}{).}\PYG{n+na}{start}\PYG{o}{();}
+        \PYG{k}{new} \PYG{n}{Thread}\PYG{o}{(}\PYG{n}{p}\PYG{o}{).}\PYG{n+na}{start}\PYG{o}{();}
+    \PYG{o}{\PYGZcb{}}
+
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,42 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{public} \PYG{k+kd}{class} \PYG{n+nc}{RationaleZahlAenderbarAtomic} \PYG{o}{\PYGZob{}}
+
+    \PYG{k+kd}{private} \PYG{n}{AtomicInteger} \PYG{n}{zaehler}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{n}{AtomicInteger} \PYG{n}{nenner}\PYG{o}{;}
+
+    \PYG{k+kd}{public} \PYG{n+nf}{RationaleZahlAenderbarAtomic}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{zaehler}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{nenner}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{if} \PYG{o}{(}\PYG{n}{nenner} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+            \PYG{k}{throw} \PYG{k}{new} \PYG{n}{RuntimeException}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}nenner ist null\PYGZdq{}}\PYG{o}{);}
+        \PYG{o}{\PYGZcb{}}
+        \PYG{c+c1}{// optimize nenner}
+        \PYG{k+kt}{int} \PYG{n}{teiler} \PYG{o}{=} \PYG{n}{ggt}\PYG{o}{(}\PYG{n}{zaehler}\PYG{o}{,} \PYG{n}{nenner}\PYG{o}{);}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{zaehler} \PYG{o}{=} \PYG{k}{new} \PYG{n}{AtomicInteger}\PYG{o}{(}\PYG{n}{zaehler} \PYG{o}{/} \PYG{n}{teiler}\PYG{o}{);}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{nenner} \PYG{o}{=} \PYG{k}{new} \PYG{n}{AtomicInteger}\PYG{o}{(}\PYG{n}{nenner} \PYG{o}{/} \PYG{n}{teiler}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kt}{void} \PYG{n+nf}{mul}\PYG{o}{(}\PYG{n}{RationaleZahlAenderbarAtomic} \PYG{n}{other}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{newzaehler} \PYG{o}{=} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getZaehler}\PYG{o}{()} \PYG{o}{*} \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getZaehler}\PYG{o}{();}
+        \PYG{k+kt}{int} \PYG{n}{newnenner}  \PYG{o}{=} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{()}  \PYG{o}{*} \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{();}
+
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{nenner}\PYG{o}{.}\PYG{n+na}{getAndSet}\PYG{o}{(}\PYG{n}{newnenner}\PYG{o}{);}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{zaehler}\PYG{o}{.}\PYG{n+na}{getAndSet}\PYG{o}{(}\PYG{n}{newzaehler}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kt}{void} \PYG{n+nf}{add}\PYG{o}{(}\PYG{n}{RationaleZahlAenderbarAtomic} \PYG{n}{other}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{basis} \PYG{o}{=} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{()} \PYG{o}{*} \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{();}
+        \PYG{k+kt}{int} \PYG{n}{zaehler} \PYG{o}{=} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getZaehler}\PYG{o}{()} \PYG{o}{*} \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{()} \PYG{o}{+}
+            \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getZaehler}\PYG{o}{()} \PYG{o}{*} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{();}
+        \PYG{k+kt}{int} \PYG{n}{teiler} \PYG{o}{=} \PYG{n}{ggt}\PYG{o}{(}\PYG{n}{basis}\PYG{o}{,} \PYG{n}{zaehler}\PYG{o}{);}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{nenner}\PYG{o}{.}\PYG{n+na}{getAndSet}\PYG{o}{(}\PYG{n}{basis} \PYG{o}{/} \PYG{n}{teiler}\PYG{o}{);}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{zaehler}\PYG{o}{.}\PYG{n+na}{getAndSet}\PYG{o}{(}\PYG{n}{zaehler} \PYG{o}{/} \PYG{n}{teiler}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{getZaehler}\PYG{o}{()} \PYG{o}{\PYGZob{}}\PYG{k}{return} \PYG{n}{zaehler}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{();\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{getNenner}\PYG{o}{()} \PYG{o}{\PYGZob{}}\PYG{k}{return} \PYG{n}{nenner}\PYG{o}{.}\PYG{n+na}{get}\PYG{o}{();\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kd}{static} \PYG{k+kt}{int} \PYG{n+nf}{ggt}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{a}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{b}\PYG{o}{)} \PYG{o}{\PYGZob{}...\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{n}{String} \PYG{n+nf}{toString}\PYG{o}{()} \PYG{o}{\PYGZob{}...\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

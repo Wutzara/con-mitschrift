@@ -1,0 +1,39 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{public} \PYG{k+kd}{class} \PYG{n+nc}{Ostern} \PYG{o}{\PYGZob{}}
+    \PYG{k+kd}{public} \PYG{k+kd}{static} \PYG{k+kt}{int} \PYG{n+nf}{ostern}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{jahr}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{a} \PYG{o}{=} \PYG{n}{jahr} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{19}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{b} \PYG{o}{=} \PYG{n}{jahr} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{4}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{c} \PYG{o}{=} \PYG{n}{jahr} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{7}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{k} \PYG{o}{=} \PYG{n}{jahr} \PYG{o}{/} \PYG{l+m+mi}{100}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{p} \PYG{o}{=} \PYG{o}{(}\PYG{l+m+mi}{8} \PYG{o}{*} \PYG{n}{k} \PYG{o}{+} \PYG{l+m+mi}{13}\PYG{o}{)} \PYG{o}{/} \PYG{l+m+mi}{25}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{q} \PYG{o}{=} \PYG{n}{k} \PYG{o}{/} \PYG{l+m+mi}{4}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{M} \PYG{o}{=} \PYG{o}{(}\PYG{l+m+mi}{15} \PYG{o}{+} \PYG{n}{k} \PYG{o}{\PYGZhy{}} \PYG{n}{p} \PYG{o}{\PYGZhy{}} \PYG{n}{q}\PYG{o}{)} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{30}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{N} \PYG{o}{=} \PYG{o}{(}\PYG{l+m+mi}{4} \PYG{o}{+} \PYG{n}{k} \PYG{o}{\PYGZhy{}} \PYG{n}{q}\PYG{o}{)} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{7}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{d} \PYG{o}{=} \PYG{o}{(}\PYG{l+m+mi}{19} \PYG{o}{*} \PYG{n}{a} \PYG{o}{+} \PYG{n}{M}\PYG{o}{)} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{30}\PYG{o}{;}
+        \PYG{k+kt}{int} \PYG{n}{e} \PYG{o}{=} \PYG{o}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{b} \PYG{o}{+} \PYG{l+m+mi}{4} \PYG{o}{*} \PYG{n}{c} \PYG{o}{+} \PYG{l+m+mi}{6} \PYG{o}{*} \PYG{n}{d} \PYG{o}{+} \PYG{n}{N}\PYG{o}{)} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{7}\PYG{o}{;}
+        \PYG{k}{return} \PYG{l+m+mi}{22} \PYG{o}{+} \PYG{n}{d} \PYG{o}{+} \PYG{n}{e}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kd}{static} \PYG{n}{LocalDate} \PYG{n+nf}{datumOstersonntag}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{jahr}\PYG{o}{)}
+    \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{tagMaerzApril} \PYG{o}{=} \PYG{n}{ostern}\PYG{o}{(}\PYG{n}{jahr}\PYG{o}{);}
+        \PYG{k+kt}{int} \PYG{n}{tag} \PYG{o}{=} \PYG{n}{tagMaerzApril} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{31} \PYG{o}{?} \PYG{n}{tagMaerzApril} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{31} \PYG{o}{:} \PYG{n}{tagMaerzApril}\PYG{o}{;}
+        \PYG{n}{Month} \PYG{n}{monat} \PYG{o}{=} \PYG{n}{tagMaerzApril} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{31} \PYG{o}{?} \PYG{n}{Month}\PYG{o}{.}\PYG{n+na}{APRIL} \PYG{o}{:} \PYG{n}{Month}\PYG{o}{.}\PYG{n+na}{MARCH}\PYG{o}{;}
+        \PYG{k}{return} \PYG{n}{LocalDate}\PYG{o}{.}\PYG{n+na}{of}\PYG{o}{(}\PYG{n}{jahr}\PYG{o}{,} \PYG{n}{monat}\PYG{o}{,} \PYG{n}{tag}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+
+	\PYG{k+kd}{public} \PYG{k+kd}{static} \PYG{k+kt}{void} \PYG{n+nf}{main}\PYG{o}{(}\PYG{n}{String}\PYG{o}{[]} \PYG{n}{args}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+
+		\PYG{n}{LocalDate} \PYG{n}{ostersonntag} \PYG{o}{=} \PYG{n}{Ostern}\PYG{o}{.}\PYG{n+na}{datumOstersonntag}\PYG{o}{(}\PYG{l+m+mi}{2015}\PYG{o}{);}
+		\PYG{n}{LocalDate} \PYG{n}{aschermittwoch} \PYG{o}{=} \PYG{n}{ostersonntag}\PYG{o}{.}\PYG{n+na}{minusDays}\PYG{o}{(}\PYG{l+m+mi}{46}\PYG{o}{);}
+		\PYG{n}{LocalDate} \PYG{n}{pfingstsonntag} \PYG{o}{=} \PYG{n}{ostersonntag}\PYG{o}{.}\PYG{n+na}{plusDays}\PYG{o}{(}\PYG{l+m+mi}{49}\PYG{o}{);}
+		\PYG{n}{LocalDate} \PYG{n}{christi\PYGZus{}himmelfahrt} \PYG{o}{=} \PYG{n}{ostersonntag}\PYG{o}{.}\PYG{n+na}{plusDays}\PYG{o}{(}\PYG{l+m+mi}{39}\PYG{o}{);}
+		\PYG{n}{LocalDate} \PYG{n}{fronleichnam} \PYG{o}{=} \PYG{n}{ostersonntag}\PYG{o}{.}\PYG{n+na}{plusDays}\PYG{o}{(}\PYG{l+m+mi}{60}\PYG{o}{);}
+		\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{printf}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Ostersonntag: \PYGZpc{}s\PYGZbs{}n\PYGZdq{}}\PYG{o}{,} \PYG{n}{ostersonntag}\PYG{o}{.}\PYG{n+na}{toString}\PYG{o}{());}
+		\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{printf}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Aschermittwoch: \PYGZpc{}s\PYGZbs{}n\PYGZdq{}}\PYG{o}{,} \PYG{n}{aschermittwoch}\PYG{o}{.}\PYG{n+na}{toString}\PYG{o}{());}
+		\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{printf}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Pfingstsonntag: \PYGZpc{}s\PYGZbs{}n\PYGZdq{}}\PYG{o}{,} \PYG{n}{pfingstsonntag}\PYG{o}{.}\PYG{n+na}{toString}\PYG{o}{());}
+		\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{printf}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Christi Himmelfahrt: \PYGZpc{}s\PYGZbs{}n\PYGZdq{}}\PYG{o}{,} \PYG{n}{christi\PYGZus{}himmelfahrt}\PYG{o}{.}\PYG{n+na}{toString}\PYG{o}{());}
+		\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{printf}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}Fronleichnam: \PYGZpc{}s\PYGZbs{}n\PYGZdq{}}\PYG{o}{,} \PYG{n}{fronleichnam}\PYG{o}{.}\PYG{n+na}{toString}\PYG{o}{());}
+	\PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

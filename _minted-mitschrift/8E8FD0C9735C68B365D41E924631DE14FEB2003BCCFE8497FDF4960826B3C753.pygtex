@@ -1,0 +1,8 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{println}\PYG{o}{(}\PYG{n}{IntStream}
+            \PYG{o}{.}\PYG{n+na}{rangeClosed}\PYG{o}{(}\PYG{l+m+mi}{1}\PYG{o}{,} \PYG{l+m+mi}{100000}\PYG{o}{)}
+            \PYG{o}{.}\PYG{n+na}{parallel}\PYG{o}{()}
+            \PYG{o}{.}\PYG{n+na}{filter}\PYG{o}{(}\PYG{n}{MyIntStream}\PYG{o}{::}\PYG{n}{isPrime}\PYG{o}{)}
+            \PYG{o}{.}\PYG{n+na}{mapToObj}\PYG{o}{(}\PYG{n}{i} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{String}\PYG{o}{.}\PYG{n+na}{valueOf}\PYG{o}{(}\PYG{n}{i}\PYG{o}{))}
+            \PYG{o}{.}\PYG{n+na}{collect}\PYG{o}{(}\PYG{n}{Collectors}\PYG{o}{.}\PYG{n+na}{joining}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}, \PYGZdq{}}\PYG{o}{)));}
+\end{Verbatim}

@@ -1,0 +1,68 @@
+%\documentclass{tufte-handout}
+\documentclass[a4paper, parskip=half]{scrartcl}
+%\usepackage{mathpazo}
+\usepackage{lmodern}
+\usepackage{microtype}
+\linespread{1.05}
+\usepackage[utf8]{inputenc}
+\usepackage[]{minted} 
+\usepackage[]{booktabs} 
+\usepackage{xcolor}
+\usepackage{mdframed}
+\definecolor{bg}{rgb}{0.95, 0.95, 0.95}
+\definecolor{bg2}{rgb}{1, 0.99, 0.83}
+\usepackage[colorlinks, urlcolor=purple]{hyperref}
+
+\setkomafont{disposition}{\fontseries{sbc}\sffamily}
+
+\setminted{fontsize=\footnotesize, 
+           %bgcolor=bg2,
+           frame=single,
+           linenos=true,
+           xleftmargin=30pt
+       }
+
+\title{Mitschrift Nebenläufige Programmierung}
+
+\author{Günther Wutz}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+\date{}
+
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+
+\newenvironment{important}[1][]{%
+   \begin{mdframed}[%
+      backgroundcolor={red!15}, hidealllines=true,
+      skipabove=0.7\baselineskip, skipbelow=0.7\baselineskip,
+      splitbottomskip=2pt, splittopskip=4pt, #1]%
+   \makebox[0pt]{% ignore the withd of !
+      \smash{% ignor the height of !
+         \fontsize{32pt}{32pt}\selectfont% make the ! bigger
+         \hspace*{-19pt}% move ! to the left
+         \raisebox{-4pt}{% move ! up a little
+            {\color{red!70!black}\sffamily\bfseries !}% type the bold red !
+         }%
+      }%
+   }%
+}{\end{mdframed}}
+
+
+\begin{document}
+
+\maketitle
+
+\input{content.tex}
+
+\end{document}

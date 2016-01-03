@@ -1,0 +1,11 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{// ggt für ganze, positive Zahlen}
+\PYG{k+kd}{public} \PYG{k+kd}{static} \PYG{k+kt}{int} \PYG{n+nf}{ggt}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{a}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{b}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{a} \PYG{o}{==} \PYG{n}{b}\PYG{o}{)}
+    \PYG{k}{return} \PYG{n}{a}\PYG{o}{;}
+    \PYG{k}{if} \PYG{o}{(}\PYG{n}{a} \PYG{o}{\PYGZlt{}} \PYG{n}{b}\PYG{o}{)}
+    \PYG{k}{return} \PYG{n}{ggt} \PYG{o}{(}\PYG{n}{a}\PYG{o}{,} \PYG{n}{b} \PYG{o}{\PYGZhy{}} \PYG{n}{a}\PYG{o}{);}
+    \PYG{k}{else}
+    \PYG{k}{return} \PYG{n}{ggt} \PYG{o}{(}\PYG{n}{a} \PYG{o}{\PYGZhy{}} \PYG{n}{b}\PYG{o}{,} \PYG{n}{b}\PYG{o}{);}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,432 @@
+\section{Einstieg in Streams (mit und ohne
+Parallelisierung)}\label{einstieg-in-streams-mit-und-ohne-parallelisierung}
+
+Um aus einem Integer-Array einen Stream zu generieren, muss man über die
+\textbf{Arrays} Klasse gehen
+
+\begin{minted}{java}
+int[] zahlen = {1, 2, 3, 4};
+IntStream is = Arrays.stream(zahlen);
+\end{minted}
+
+\subsection{Aufgabe 1 - IntStream}\label{aufgabe-1---intstream}
+
+Gegeben
+\texttt{int{[}{]}\ zahlen\ =\ \{3,\ 5,\ 1,\ 3,\ 7,\ 29,\ 33,\ 49,\ 5,\ 1,\ 1,\ 2,\ 3\};}
+
+\subsubsection{Summe IntStream}\label{summe-intstream}
+
+\begin{minted}{java}
+IntStream is = Arrays.stream(zahlen);
+System.out.Println(is.sum());
+\end{minted}
+
+\begin{minted}{text}
+Output:
+142
+\end{minted}
+
+\subsubsection{Durschnitt IntStream}\label{durschnitt-intstream}
+
+\begin{minted}{java}
+IntStream is = Arrays.stream(zahlen);
+System.out.Println(is.average().getAsDouble());
+\end{minted}
+
+\begin{minted}{text}
+Output:
+10.923076923076923
+\end{minted}
+
+\subsubsection{Maximum IntStream}\label{maximum-intstream}
+
+\begin{minted}{java}
+IntStream is = Arrays.stream(zahlen);
+System.out.Println(is.max());
+\end{minted}
+
+\begin{minted}{text}
+Output:
+49
+\end{minted}
+
+\subsubsection{Histogramm IntStream}\label{histogramm-intstream}
+
+\begin{minted}{java}
+IntStream s = Arrays.stream(zahlen);
+Map<Integer, Long> histogramm = 
+    s.boxed().collect(Collectors.groupingBy(
+        Integer::intValue, Collectors.counting()));
+System.out.println(histogramm);
+\end{minted}
+
+\begin{minted}{text}
+Output:
+{49=1, 33=1, 1=3, 2=1, 3=3, 5=2, 7=1, 29=1}
+\end{minted}
+
+\subsubsection{Ausgabe in der Form {[}3, 5, 3, \ldots{}, 2,
+3{]}}\label{ausgabe-in-der-form-3-5-3-2-3}
+
+\begin{minted}{java}
+IntStream s = Arrays.stream(zahlen);
+String str = "["
+             + s.mapToObj(i -> String.valueOf(i)).collect(Collectors.joining(", "))
+             + "]";
+System.out.println(str);
+\end{minted}
+
+\begin{minted}{text}
+Output:
+[3, 5, 1, 3, 7, 29, 33, 49, 5, 1, 1, 2, 3]
+\end{minted}
+
+\subsection{Aufgabe 2 - Stream}\label{aufgabe-2---stream}
+
+\subsubsection{Summe}\label{summe}
+
+\begin{minted}{java}
+List<Integer> zahlen = 
+    Arrays.asList(new Integer[] { 3, 5, 1, 3, 7, 29, 33, 49, 5, 1, 1, 2, 3 });
+System.out.println(zahlen.stream()
+                  .collect(Collectors.summingInt(Integer::intValue)));
+\end{minted}
+
+\subsubsection{Durchschnitt}\label{durchschnitt}
+
+\begin{minted}{java}
+List<Integer> zahlen = 
+    Arrays.asList(new Integer[] { 3, 5, 1, 3, 7, 29, 33, 49, 5, 1, 1, 2, 3 });
+System.out.println(zahlen.stream()
+                  .collect(Collectors.averagingInt(Integer::intValue)));
+\end{minted}
+
+\subsubsection{Maximum}\label{maximum}
+
+\begin{minted}{java}
+List<Integer> zahlen =
+    Arrays.asList(new Integer[] { 3, 5, 1, 3, 7, 29, 33, 49, 5, 1, 1, 2, 3 });
+System.out.println(zahlen.stream()
+                  .max(Integer::compareTo).get());
+\end{minted}
+
+Achtung! \texttt{stream().max(...)} liefert ein
+\texttt{Optional\textless{}Integer\textgreater{}} weswegen man
+eigentlich eine Fallunterscheidung wie im folgenden Beispiel machen
+müsste (aus Einfachheitsgründen verzichte ich darauf)
+
+\begin{minted}{java}
+List<Integer> zahlen =
+    Arrays.asList(new Integer[] { 3, 5, 1, 3, 7, 29, 33, 49, 5, 1, 1, 2, 3 });
+Optional<Integer> optInt = zahlen.stream().max(Integer::compareTo);
+if(optInt.isPresent()) System.out.println(optInt.get());
+\end{minted}
+
+\subsubsection{Histogramm}\label{histogramm}
+
+\begin{minted}{java}
+List<Integer> zahlen =
+    Arrays.asList(new Integer[] { 3, 5, 1, 3, 7, 29, 33, 49, 5, 1, 1, 2, 3 });
+System.out.println(zahlen.stream()
+                  .collect(Collectors
+                  .groupingBy(Integer::intValue, Collectors.counting())));
+\end{minted}
+
+\subsubsection{Ausgabe}\label{ausgabe}
+
+\begin{minted}{java}
+List<Integer> zahlen =
+    Arrays.asList(new Integer[] { 3, 5, 1, 3, 7, 29, 33, 49, 5, 1, 1, 2, 3 });
+System.out.println("[" 
+                    + zahlen.stream()
+                      .map(i -> i.toString())
+                      .collect(Collectors.joining(", "))
+                    + "]");
+\end{minted}
+
+\section{Parallelisieren mit Streams}\label{parallelisieren-mit-streams}
+
+Gegeben ist die folgende recht ineffiziente Primzahl-Testmethode für
+ganze Zahlen \textgreater{}= 2. Diese Methode ist ein Prädikat für ganze
+Zahlen im Sinne von Java 8.
+
+\begin{minted}{java}
+static boolean isPrime(int zahl) {
+    int teiler = 2;
+    while (zahl % teiler != 0)
+        teiler++;
+    if (zahl == teiler)
+        return true;
+    return false;
+}
+\end{minted}
+
+\subsection{Aufgabe 1}\label{aufgabe-1}
+
+Geben Sie die Primzahlen im Bereich 1..1000 aus
+
+\begin{minted}{java}
+System.out.println(IntStream
+            .rangeClosed(1, 1000)
+            .filter(MyIntStream::isPrime)
+            .mapToObj(i -> String.valueOf(i))
+            .collect(Collectors.joining(", ")));
+\end{minted}
+
+\subsection{Aufgabe 2}\label{aufgabe-2}
+
+Geben Sie die Primzahlen im Bereich 1..100000 aus. Nützen Sie alle Kerne
+Ihres Rechners zur Berechnung!
+
+\begin{minted}{java}
+System.out.println(IntStream
+            .rangeClosed(1, 100000)
+            .parallel()
+            .filter(MyIntStream::isPrime)
+            .mapToObj(i -> String.valueOf(i))
+            .collect(Collectors.joining(", ")));
+\end{minted}
+
+\subsection{Aufgabe 3 (Optional)}\label{aufgabe-3-optional}
+
+Wenn Ihnen die obige Methode zur Ermittlung von Primzahlen zu primitiv
+ist, geben Sie eine effizientere Variante an.
+
+\section{Ein einfacher Spliterator}\label{ein-einfacher-spliterator}
+
+In einer der Aufgaben werden \mintinline{java}{Path}-Objekte (d. h.
+Objekte einer Klasse, die die \texttt{Path}-Schnittstelle
+implementieren) von einem Erzeuger in eine \texttt{BlockingQueue}
+gestellt.
+
+\subsection{Aufgabe 1: einfache Erzeuger-Verbraucher-Kopplung über einen
+Stream}\label{aufgabe-1-einfache-erzeuger-verbraucher-kopplung-uxfcber-einen-stream}
+
+Eine \texttt{BlockingQueue} ist eine \texttt{Collection}. Damit erhalten
+wir einen Stream im Sinne von Java 8 zum Durchlaufen der Resultate des
+o. a. Erzeugers. Verwenden Sie diesen Stream in einem bzw. zwei
+Verbraucher(n) zum Auslesen aller \texttt{Path}-Objekte.
+
+Starten Sie einen Erzeuger und 1-2 Verbraucher. Das Hauptprogramm soll
+sich erst beenden, wenn sich alle Erzeuger bzw. Verbraucher beendet
+haben.
+
+Wie verhält sich ihr Programm?
+
+\subsection{Aufgabe 2: ein selbst erstellter
+Spliterator}\label{aufgabe-2-ein-selbst-erstellter-spliterator}
+
+Geben Sie einen \texttt{Spliterator} für die o. a.
+\texttt{BlockingQueue} an. Sie können hierzu die Methode \texttt{stream}
+der Klasse \texttt{java.util.stream.StreamSupport} benützen. Stellen Sie
+sicher, dass alle vom Erzeuger gelieferten Objekte auch vom Verbraucher
+gelesen werden.
+
+\section{Aufgaben aus Java Magazine von
+Oracle}\label{aufgaben-aus-java-magazine-von-oracle}
+
+\begin{minted}{java}
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class JavaMagazine2014Sept {
+    static final int MAXSEEDVALUE = 200_000;
+    static final int SEEDVALUE = new Random().nextInt(MAXSEEDVALUE);
+    static final int COUNT = 10;
+
+    public static void main(String[] args) {
+        System.out.println(IntStream.rangeClosed(SEEDVALUE+1,MAXSEEDVALUE)
+        .parallel()
+        .filter(i -> IntStream. range (2, i)
+        .filter(j-> i%j == 0)
+        .count() == 0)
+        .limit(COUNT)
+        .mapToObj(String::valueOf )
+        .collect(Collectors.joining("")));
+    }
+}
+\end{minted}
+
+This program finds the \texttt{COUNT} number of prime numbers that are
+greater than some random starting value. It runs slowly because its not
+making effective use of the Stream API. What change could be made that
+would result in a considerable speedup?
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Replace the lambda expression
+  \texttt{(j\ -\textgreater{}\ i\ \%\ j\ ==\ 0)} by an anonymous class
+  implementing the \texttt{IntPredicate} interface
+\item
+  Move the \texttt{limit()} function before the outer \texttt{filter()}
+\item
+  Use \texttt{noneMatch()} instead of the inner \texttt{filter()}
+\item
+  Replace both \texttt{filter()} functions using the iteration of the
+  Java Collections Framework.
+\end{enumerate}
+
+\section{Desktop-Suche}\label{desktop-suche}
+
+Gegeben ist ein GUI Rahmenprogramm (siehe con-ws14-blatt07.zip im
+eLearning)
+
+\subsection{Aufgabe 1}\label{aufgabe-1-1}
+
+Auf Drückn der \texttt{Start}-Schaltfläche soll eine nebenläufige Suche
+gestartet werden. Teilergebnisse und das Endergebnis der Suche sollen
+angezeigt werden (im Hauptfenster). Benützen Sie dazu eine Ihrer
+Lösungen der Aufgabe 4.
+
+\subsection{Aufgabe 2}\label{aufgabe-2-1}
+
+Nach dem Drücken des \texttt{Stop}-Schalters sollen alle gestarteten
+Aktivitäten so bald wie möglich beendet werden. Die laufende GUI soll
+nicht abgebrochen werden. \texttt{System.exit()} löst das Problem nicht.
+
+\section{Optimistisches Sperren}\label{optimistisches-sperren}
+
+\subsection{Aufgabe 1 - Sieht leicht aus, ist aber nicht ganz
+leicht}\label{aufgabe-1---sieht-leicht-aus-ist-aber-nicht-ganz-leicht}
+
+Versuchen Sie, einen Zähler in einem System mit Nebenläufigkeit für
+ganze Zahlen zu implementieren. \texttt{next()} soll beginnend ab 0
+fortlaufend ganze Zahlen liefern. \emph{Die Performance sollte besser
+sein, als bei einer Lösung mit einer
+\texttt{synchronized\ next()}-Funktion.}
+
+\begin{minted}{java}
+class Counter {
+    private ... int counter;
+    public int next() { return counter++; } // Liefern und schalten
+}
+\end{minted}
+
+\begin{important}
+Prinzipiell wird man eine Lösung bei den sog. optimistischen Sperren suchen.
+\textbf{Aber}: man kann wohl nur dann Lösungen mit kürzeren Antwortzeiten
+finden, wenn man die Phasen der Sperrung reduziert. Einen möglichen Ansatz
+zeigt D. Lea mit seinem Programm `Spinlock` (siehe unten).
+\end{important}
+
+\subsection{Optimistische Updates: {[}Lea99,
+2.4.4.2{]}}\label{optimistische-updates-lea99-2.4.4.2}
+
+Ein optimistisches Update hat 3 Phasen
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Innerhalb einer Sperre: Kopieren des aktuellen Zustands
+\item
+  Außerhalb der Sperre: Kopie ändern
+\item
+  Innerhalb einer Sperre: Zurückschreiben, aber nur, falls sich der
+  Zustand nicht geändert hat
+\end{enumerate}
+
+Optimistische Update-Techniken Sperren den Zugriff auf Objekte nur kurz,
+insbesondere bei Multicore-Prozessoren.
+
+\begin{minted}{java}
+class Optimistic { // Generic code sketch
+    private State state;
+
+    private synchronized State getState() {
+        return state;
+    }
+
+    private synchronized boolean commit(State assumed, State next) {
+        if (state == assumed) {
+            state = next;
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+\end{minted}
+
+\subsubsection{Was tun, wenn der commit nicht
+klappt?}\label{was-tun-wenn-der-commit-nicht-klappt}
+
+Ansatz: wir probieren es solange, bis es klappt. Dazu wollen wir die
+Sperre möglichst kurz halten, wie im folgenden Beispiel für einen
+Spinlock aus {[}Lea99, 3.2.6.5{]}. Wenn Sie das Beispiel selbst
+implementieren, werden Sie sehen, dass die Laufzeiten steigen, wenn man
+nach den Fehlschlägen beim \texttt{commit} sofort wieder probiert, ob
+das \texttt{commit} erfolgreich ist. Die Schwierigkeit besteht darin,
+die \emph{richtigen} Pausen für die Wiederholung zu finden.
+
+\subsubsection{Aktives Warten: Busy Wait nach {[}Lea99,
+3.2.6.5{]}}\label{aktives-warten-busy-wait-nach-lea99-3.2.6.5}
+
+\begin{important}
+Busy Wait ist nur für extreme Sonderfälle sinnvoll. Meist funktioniert die
+einfache Lösung mit \mintinline{java}{wait()} und
+\mintinline{java}{notifyAll()} besser. Zuverlässiger ist sie in jedem Fall.
+\end{important}
+
+Das folgende Listing zeigt die einfachste Form eines sog. ``Spinlock''.
+
+\begin{minted}{java}
+protected void busyWaitUntilCond() {
+    while(!busy) {
+        Thread.yield();
+    }
+}
+\end{minted}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Ein Spinlock kann beliebig viel CPU-Zeit verbrauchen
+\item
+  \mintinline{java}{yield} ist nur ein Hinweis an die JVM, es muss kein
+  anderer Thread aktiviert werden
+\item
+  Einzig sinnvoller Anwendungsfalls: extrem ``kurze'' kritische
+  Abschnitte
+\end{enumerate}
+
+\begin{minted}{java}
+class SpinLock { // Avoid needing to use this
+    private volatile boolean busy = false;
+
+    synchronized void release() {
+        busy = false;
+    }
+
+    void acquire() throws InterruptedException {
+        int itersBeforeYield = 100; // 100 is arbitrary
+        int itersBeforeSleep = 200; // 200 is arbitrary
+        long sleepTime = 1; // 1msec is arbitrary
+        int iters = 0;
+        for(;;) {
+            if(!busy) { // test-and-test-and-set
+                synchronized(this) {
+                    if(!busy) {
+                        busy = true;
+                        return;
+                    }
+                }
+            }
+
+            if(iters < itersBeforeYield) { // spin phase
+                ++iters;
+            } else if(iters < itersBeforeSleep) { // yield phase
+                ++iters;
+                Thread.yield();
+            } else { // back-off phase
+                Thread.sleep(sleepTime);
+                sleepTime = 3 * sleepTime / 2 + 1; // 50 percent is arbitrary
+            }
+        }
+    }
+}
+\end{minted}

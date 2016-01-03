@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{IntStream} \PYG{n}{s} \PYG{o}{=} \PYG{n}{Arrays}\PYG{o}{.}\PYG{n+na}{stream}\PYG{o}{(}\PYG{n}{zahlen}\PYG{o}{);}
+\PYG{n}{String} \PYG{n}{str} \PYG{o}{=} \PYG{l+s}{\PYGZdq{}[\PYGZdq{}}
+             \PYG{o}{+} \PYG{n}{s}\PYG{o}{.}\PYG{n+na}{mapToObj}\PYG{o}{(}\PYG{n}{i} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{String}\PYG{o}{.}\PYG{n+na}{valueOf}\PYG{o}{(}\PYG{n}{i}\PYG{o}{)).}\PYG{n+na}{collect}\PYG{o}{(}\PYG{n}{Collectors}\PYG{o}{.}\PYG{n+na}{joining}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}, \PYGZdq{}}\PYG{o}{))}
+             \PYG{o}{+} \PYG{l+s}{\PYGZdq{}]\PYGZdq{}}\PYG{o}{;}
+\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{println}\PYG{o}{(}\PYG{n}{str}\PYG{o}{);}
+\end{Verbatim}

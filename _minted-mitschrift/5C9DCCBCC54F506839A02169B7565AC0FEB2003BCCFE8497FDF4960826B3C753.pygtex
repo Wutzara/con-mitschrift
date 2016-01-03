@@ -1,0 +1,35 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{public} \PYG{k+kd}{class} \PYG{n+nc}{Consumer} \PYG{k+kd}{implements} \PYG{n}{Runnable} \PYG{o}{\PYGZob{}}
+    \PYG{k+kd}{private} \PYG{n}{BlockingQueue}\PYG{o}{\PYGZlt{}}\PYG{n}{Path}\PYG{o}{\PYGZgt{}} \PYG{n}{queue}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{k+kt}{boolean} \PYG{n}{run} \PYG{o}{=} \PYG{k+kc}{true}\PYG{o}{;}
+
+    \PYG{c+cm}{/**}
+\PYG{c+cm}{     *}
+\PYG{c+cm}{     */}
+    \PYG{k+kd}{public} \PYG{n+nf}{Consumer}\PYG{o}{(}\PYG{n}{BlockingQueue}\PYG{o}{\PYGZlt{}}\PYG{n}{Path}\PYG{o}{\PYGZgt{}} \PYG{n}{queue}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{queue} \PYG{o}{=} \PYG{n}{queue}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{n+nd}{@Override}
+    \PYG{k+kd}{public} \PYG{k+kt}{void} \PYG{n+nf}{run}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+        \PYG{k}{while}\PYG{o}{(}\PYG{n}{run}\PYG{o}{)\PYGZob{}}
+
+            \PYG{k}{try} \PYG{o}{\PYGZob{}}
+                \PYG{n}{Path} \PYG{n}{p} \PYG{o}{=} \PYG{o}{(}\PYG{n}{Path}\PYG{o}{)}\PYG{n}{queue}\PYG{o}{.}\PYG{n+na}{take}\PYG{o}{();}
+                \PYG{n}{handlePath}\PYG{o}{(}\PYG{n}{p}\PYG{o}{);}
+            \PYG{o}{\PYGZcb{}} \PYG{k}{catch}\PYG{o}{(}\PYG{n}{Exception} \PYG{n}{e}\PYG{o}{)\PYGZob{}}
+                \PYG{n}{e}\PYG{o}{.}\PYG{n+na}{printStackTrace}\PYG{o}{();}
+            \PYG{o}{\PYGZcb{}}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+
+	\PYG{k+kd}{private} \PYG{k+kt}{void} \PYG{n+nf}{handlePath}\PYG{o}{(}\PYG{n}{Path} \PYG{n}{p}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+		\PYG{k}{if}\PYG{o}{(}\PYG{n}{p}\PYG{o}{.}\PYG{n+na}{toString}\PYG{o}{().}\PYG{n+na}{equals}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}wearedone\PYGZdq{}}\PYG{o}{))} \PYG{o}{\PYGZob{}}
+			\PYG{n}{run} \PYG{o}{=} \PYG{k+kc}{false}\PYG{o}{;}
+		\PYG{o}{\PYGZcb{}} \PYG{k}{else} \PYG{o}{\PYGZob{}}
+			\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{printf}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}File: \PYGZpc{}s\PYGZbs{}n\PYGZdq{}}\PYG{o}{,} \PYG{n}{p}\PYG{o}{.}\PYG{n+na}{getFileName}\PYG{o}{());}
+		\PYG{o}{\PYGZcb{}}
+	\PYG{o}{\PYGZcb{}}
+
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

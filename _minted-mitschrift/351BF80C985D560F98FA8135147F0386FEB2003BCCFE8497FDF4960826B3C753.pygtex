@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{public} \PYG{k+kd}{interface} \PYG{n+nc}{BlockingQueue}\PYG{o}{\PYGZlt{}}\PYG{n}{E}\PYG{o}{\PYGZgt{}}
+\PYG{k+kd}{extends} \PYG{n}{Queue}\PYG{o}{\PYGZlt{}}\PYG{n}{E}\PYG{o}{\PYGZgt{}}
+\end{Verbatim}

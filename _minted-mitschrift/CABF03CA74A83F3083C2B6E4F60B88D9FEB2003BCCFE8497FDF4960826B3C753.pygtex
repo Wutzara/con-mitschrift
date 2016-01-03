@@ -1,0 +1,41 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{public} \PYG{k+kd}{class} \PYG{n+nc}{RationaleZahl} \PYG{o}{\PYGZob{}}
+
+    \PYG{k+kd}{final} \PYG{k+kt}{int} \PYG{n}{zaehler}\PYG{o}{;}
+    \PYG{k+kd}{final} \PYG{k+kt}{int} \PYG{n}{nenner}\PYG{o}{;}
+
+    \PYG{k+kd}{public} \PYG{n+nf}{RationaleZahl}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{zaehler}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{nenner}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{zaehler} \PYG{o}{=} \PYG{n}{zaehler}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{nenner} \PYG{o}{=} \PYG{n}{nenner}\PYG{o}{;}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{n}{RationaleZahl} \PYG{n+nf}{mul}\PYG{o}{(}\PYG{n}{RationaleZahl} \PYG{n}{other}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{newzaehler} \PYG{o}{=} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getZaehler}\PYG{o}{()} \PYG{o}{*} \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getZaehler}\PYG{o}{();}
+        \PYG{k+kt}{int} \PYG{n}{newnenner}  \PYG{o}{=} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{()}  \PYG{o}{*} \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{();}
+
+        \PYG{k}{return} \PYG{k}{new} \PYG{n}{RationaleZahl}\PYG{o}{(}\PYG{n}{newzaehler}\PYG{o}{,} \PYG{n}{newnenner}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{n}{RationaleZahl} \PYG{n+nf}{add}\PYG{o}{(}\PYG{n}{RationaleZahl} \PYG{n}{other}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k+kt}{int} \PYG{n}{basis} \PYG{o}{=} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{()} \PYG{o}{*} \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{();}
+        \PYG{k+kt}{int} \PYG{n}{zaehler} \PYG{o}{=} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getZaehler}\PYG{o}{()} \PYG{o}{*} \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{()} \PYG{o}{+}
+            \PYG{n}{other}\PYG{o}{.}\PYG{n+na}{getZaehler}\PYG{o}{()} \PYG{o}{*} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{();}
+        \PYG{k+kt}{int} \PYG{n}{teiler} \PYG{o}{=} \PYG{n}{ggt}\PYG{o}{(}\PYG{n}{basis}\PYG{o}{,} \PYG{n}{zaehler}\PYG{o}{);}
+        \PYG{n}{basis} \PYG{o}{=} \PYG{n}{basis} \PYG{o}{/} \PYG{n}{teiler}\PYG{o}{;}
+        \PYG{n}{zaehler} \PYG{o}{=} \PYG{n}{zaehler} \PYG{o}{/} \PYG{n}{teiler}\PYG{o}{;}
+
+        \PYG{k}{return} \PYG{k}{new} \PYG{n}{RationaleZahl}\PYG{o}{(}\PYG{n}{zaehler}\PYG{o}{,} \PYG{n}{basis}\PYG{o}{);}
+    \PYG{o}{\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{getZaehler}\PYG{o}{()} \PYG{o}{\PYGZob{}}\PYG{k}{return} \PYG{n}{zaehler}\PYG{o}{;\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kt}{int} \PYG{n+nf}{getNenner}\PYG{o}{()} \PYG{o}{\PYGZob{}}\PYG{k}{return} \PYG{n}{nenner}\PYG{o}{;\PYGZcb{}}
+
+    \PYG{k+kd}{public} \PYG{k+kd}{static} \PYG{k+kt}{int} \PYG{n+nf}{ggt}\PYG{o}{(}\PYG{k+kt}{int} \PYG{n}{a}\PYG{o}{,} \PYG{k+kt}{int} \PYG{n}{b}\PYG{o}{)} \PYG{o}{\PYGZob{}...\PYGZcb{}}
+
+    \PYG{n+nd}{@Override}
+    \PYG{k+kd}{public} \PYG{n}{String} \PYG{n+nf}{toString}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+        \PYG{k}{return} \PYG{n}{String}\PYG{o}{.}\PYG{n+na}{format}\PYG{o}{(}\PYG{l+s}{\PYGZdq{}\PYGZpc{}d/\PYGZpc{}d\PYGZdq{}}\PYG{o}{,} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getZaehler}\PYG{o}{(),} \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{getNenner}\PYG{o}{());}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

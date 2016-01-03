@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{IntStream} \PYG{n}{is} \PYG{o}{=} \PYG{n}{Arrays}\PYG{o}{.}\PYG{n+na}{stream}\PYG{o}{(}\PYG{n}{zahlen}\PYG{o}{);}
+\PYG{n}{System}\PYG{o}{.}\PYG{n+na}{out}\PYG{o}{.}\PYG{n+na}{Println}\PYG{o}{(}\PYG{n}{is}\PYG{o}{.}\PYG{n+na}{max}\PYG{o}{());}
+\end{Verbatim}

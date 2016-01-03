@@ -1,0 +1,20 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kd}{public} \PYG{k+kd}{class} \PYG{n+nc}{Point} \PYG{o}{\PYGZob{}}
+    \PYG{k+kd}{private} \PYG{k+kd}{final} \PYG{k+kt}{double} \PYG{n}{x}\PYG{o}{,} \PYG{n}{y}\PYG{o}{;}
+    \PYG{k+kd}{private} \PYG{k+kt}{double} \PYG{n}{distance}\PYG{o}{;} \PYG{c+c1}{// Hinweis: sqrt (x*x+y*y);}
+    \PYG{k+kd}{public} \PYG{n+nf}{Point}\PYG{o}{(}\PYG{k+kd}{final} \PYG{k+kt}{double} \PYG{n}{x}\PYG{o}{,} \PYG{k+kd}{final} \PYG{k+kt}{double} \PYG{n}{y}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{x} \PYG{o}{=} \PYG{n}{x}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{y} \PYG{o}{=} \PYG{n}{y}\PYG{o}{;}
+        \PYG{k}{this}\PYG{o}{.}\PYG{n+na}{distance} \PYG{o}{=} \PYG{n}{Double}\PYG{o}{.}\PYG{n+na}{NaN} \PYG{o}{;} \PYG{c+c1}{// Lazy: Könnte u.U. nie benötigt werden}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{getX}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+        \PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{getY}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+            \PYG{k}{return} \PYG{n}{x}\PYG{o}{;}
+            \PYG{k}{return} \PYG{n}{y}\PYG{o}{;}
+        \PYG{o}{\PYGZcb{}}
+    \PYG{o}{\PYGZcb{}}
+    \PYG{k+kd}{public} \PYG{k+kt}{double} \PYG{n+nf}{getDistance}\PYG{o}{()} \PYG{o}{\PYGZob{}}
+        \PYG{o}{...???}
+    \PYG{o}{\PYGZcb{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}
