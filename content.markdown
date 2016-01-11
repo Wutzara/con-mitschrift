@@ -195,6 +195,22 @@ In einer der Aufgaben werden `Path`{.java}-Objekte (d. h. Objekte einer Klasse,
 die die `Path`-Schnittstelle implementieren) von einem Erzeuger in eine
 `BlockingQueue` gestellt.
 
+Grundlagen
+----------
+
+Ein Spliterator ist ein **Interface** der Java API
+
+~~~ java
+public interface Spliterator<T> {
+    public abstract boolean tryAdvance(Consumer<? super T>);
+    public void forEachRemaining(Consumer<? super T>);
+    public abstract Spliterator<T> trySplit();
+    public abstract long estimateSize();
+    public long getExactSizeIfKnown();
+    public Comparator<? super T> getComparator();
+}
+~~~
+
 Aufgabe 1: einfache Erzeuger-Verbraucher-Kopplung über einen Stream
 -------------------------------------------------------------------
 Eine `BlockingQueue` ist eine `Collection`. Damit erhalten wir einen Stream im
@@ -206,6 +222,109 @@ Starten Sie einen Erzeuger und 1-2 Verbraucher. Das Hauptprogramm soll sich
 erst beenden, wenn sich alle Erzeuger bzw. Verbraucher beendet haben.
 
 Wie verhält sich ihr Programm?
+
+* * *
+
+Um nochmal zu verdeutlichen, dass Programm aus der vorherigen Aufgabe
+
+~~~ java
+public class Producer extends SimpleFileVisitor<Path> implements Runnable {
+    private final BlockingQueue<Path> queue;
+    private final int consumer;
+
+    public Producer(BlockingQueue<Path> queue, int consumer)
+    {
+        this.queue = queue;
+        this.consumer = consumer;
+    }
+
+    @Override
+    public void run() {
+        try {
+            Path path = Paths.get("/home/gunibert/development");
+            Files.walkFileTree(path, this);
+            for(int i = 0; i < consumer; ++i) {
+            	Path poisonPill = Paths.get("wearedone");
+            	queue.put(poisonPill);
+            }
+        } catch(IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public FileVisitResult visitFile(
+        Path file, BasicFileAttributes arg1) throws IOException {
+
+        if(file.toString().matches(".*\\.(java|cpp|h)")) {
+            try {
+                queue.put(file);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return FileVisitResult.CONTINUE;
+    }
+}
+~~~
+
+~~~ java
+public class Consumer implements Runnable {
+    private BlockingQueue<Path> queue;
+    private boolean run = true;
+
+    public Consumer(BlockingQueue<Path> queue) {
+        this.queue = queue;
+    }
+
+    @Override
+    public void run() {
+        while(run){
+        	
+            try {
+                Path p = (Path)queue.take();
+                handlePath(p);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+	private void handlePath(Path p) {
+		if(p.toString().equals("wearedone")) {
+			run = false;
+		} else {
+			System.out.printf("File: %s\n", p.getFileName());
+		}
+	}
+}
+~~~
+
+~~~ java
+public static void main(String[] args) {
+    BlockingQueue<Path> queue = new LinkedBlockingQueue<Path>();
+    Producer p = new Producer(queue, 1);
+    Consumer c = new Consumer(queue);
+    
+    new Thread(c).start();
+    new Thread(p).start();
+}
+~~~
+
+Anstelle des `Consumers` sollen wir hier einen Stream zum Auslesen der
+`Path`-Objekte nutzen.
+
+Ich hab das jetzt einmal mit diesem Codeschnippsel getestet und bin nicht
+sicher, ob ich damit das gewünschte Ergebnis bekomme.
+
+~~~ java
+queue.stream().map(path -> path.toString()).forEach(System.out::println);
+~~~
+
+Die Krux an der Sache ist, dass man zum Zeitpunkt t als Stream lediglich den
+Inhalt bekommt, der da ist. Nachdem dieser ausgelesen wurde, beendet sich das
+Programm (was nicht der eigentliche Nutzen sein sollte). 
 
 Aufgabe 2: ein selbst erstellter Spliterator
 --------------------------------------------

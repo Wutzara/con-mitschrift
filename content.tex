@@ -199,6 +199,21 @@ Objekte einer Klasse, die die \texttt{Path}-Schnittstelle
 implementieren) von einem Erzeuger in eine \texttt{BlockingQueue}
 gestellt.
 
+\subsection{Grundlagen}\label{grundlagen}
+
+Ein Spliterator ist ein \textbf{Interface} der Java API
+
+\begin{minted}{java}
+public interface Spliterator<T> {
+    public abstract boolean tryAdvance(Consumer<? super T>);
+    public void forEachRemaining(Consumer<? super T>);
+    public abstract Spliterator<T> trySplit();
+    public abstract long estimateSize();
+    public long getExactSizeIfKnown();
+    public Comparator<? super T> getComparator();
+}
+\end{minted}
+
 \subsection{Aufgabe 1: einfache Erzeuger-Verbraucher-Kopplung über einen
 Stream}\label{aufgabe-1-einfache-erzeuger-verbraucher-kopplung-uxfcber-einen-stream}
 
@@ -212,6 +227,109 @@ sich erst beenden, wenn sich alle Erzeuger bzw. Verbraucher beendet
 haben.
 
 Wie verhält sich ihr Programm?
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+Um nochmal zu verdeutlichen, dass Programm aus der vorherigen Aufgabe
+
+\begin{minted}{java}
+public class Producer extends SimpleFileVisitor<Path> implements Runnable {
+    private final BlockingQueue<Path> queue;
+    private final int consumer;
+
+    public Producer(BlockingQueue<Path> queue, int consumer)
+    {
+        this.queue = queue;
+        this.consumer = consumer;
+    }
+
+    @Override
+    public void run() {
+        try {
+            Path path = Paths.get("/home/gunibert/development");
+            Files.walkFileTree(path, this);
+            for(int i = 0; i < consumer; ++i) {
+                Path poisonPill = Paths.get("wearedone");
+                queue.put(poisonPill);
+            }
+        } catch(IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public FileVisitResult visitFile(
+        Path file, BasicFileAttributes arg1) throws IOException {
+
+        if(file.toString().matches(".*\\.(java|cpp|h)")) {
+            try {
+                queue.put(file);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return FileVisitResult.CONTINUE;
+    }
+}
+\end{minted}
+
+\begin{minted}{java}
+public class Consumer implements Runnable {
+    private BlockingQueue<Path> queue;
+    private boolean run = true;
+
+    public Consumer(BlockingQueue<Path> queue) {
+        this.queue = queue;
+    }
+
+    @Override
+    public void run() {
+        while(run){
+            
+            try {
+                Path p = (Path)queue.take();
+                handlePath(p);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void handlePath(Path p) {
+        if(p.toString().equals("wearedone")) {
+            run = false;
+        } else {
+            System.out.printf("File: %s\n", p.getFileName());
+        }
+    }
+}
+\end{minted}
+
+\begin{minted}{java}
+public static void main(String[] args) {
+    BlockingQueue<Path> queue = new LinkedBlockingQueue<Path>();
+    Producer p = new Producer(queue, 1);
+    Consumer c = new Consumer(queue);
+    
+    new Thread(c).start();
+    new Thread(p).start();
+}
+\end{minted}
+
+Anstelle des \texttt{Consumers} sollen wir hier einen Stream zum
+Auslesen der \texttt{Path}-Objekte nutzen.
+
+Ich hab das jetzt einmal mit diesem Codeschnippsel getestet und bin
+nicht sicher, ob ich damit das gewünschte Ergebnis bekomme.
+
+\begin{minted}{java}
+queue.stream().map(path -> path.toString()).forEach(System.out::println);
+\end{minted}
+
+Die Krux an der Sache ist, dass man zum Zeitpunkt t als Stream lediglich
+den Inhalt bekommt, der da ist. Nachdem dieser ausgelesen wurde, beendet
+sich das Programm (was nicht der eigentliche Nutzen sein sollte).
 
 \subsection{Aufgabe 2: ein selbst erstellter
 Spliterator}\label{aufgabe-2-ein-selbst-erstellter-spliterator}

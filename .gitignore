@@ -2,3 +2,4 @@
 *.aux
 _minted_mitschrift
 *.out
+*.pygtex
